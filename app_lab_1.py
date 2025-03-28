@@ -18,7 +18,7 @@ BUTTON_TEXT_COLOR = "#4C4646"          # цвет текста на кнопке
 HEADER_MENU_COLOR = "#262123"          # цвет верхнего меню Streamlit
 
 # === Настройки страницы ===
-st.set_page_config(page_title="HOSQ Artists Mapping", layout="wide")
+st.set_page_config(page_title="Artists Graph", layout="wide")
 
 # === CSS стилизация ===
 st.markdown(f"""
@@ -124,6 +124,7 @@ for _, row in filtered_df.iterrows():
     popup = f"""
     <div style='text-align:center; padding: 10px;'>
         <div style='font-weight:bold; font-size: 14px; margin-bottom: 5px;'>{name}</div>
+        {f"<img src='{photo}' width='100' style='border-radius: 6px;'><br>" if photo else ""}
         {f"<b>Telegram:</b> {telegram}<br>" if telegram else ""}
         {f"<b>Email:</b> {email}<br>" if email else ""}
     </div>
