@@ -124,7 +124,6 @@ for _, row in filtered_df.iterrows():
     popup = f"""
     <div style='text-align:center; padding: 10px;'>
         <div style='font-weight:bold; font-size: 14px; margin-bottom: 5px;'>{name}</div>
-        {f"<img src='{photo}' width='100' style='border-radius: 6px;'><br>" if photo else ""}
         {f"<b>Telegram:</b> {telegram}<br>" if telegram else ""}
         {f"<b>Email:</b> {email}<br>" if email else ""}
     </div>
