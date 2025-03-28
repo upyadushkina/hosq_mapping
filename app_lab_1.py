@@ -62,6 +62,16 @@ st.markdown(f"""
 df = pd.read_csv("Etudes Lab 1 artistis.csv").fillna("")
 df["professional field"] = df["professional field"].astype(str)
 
+# === Преобразование Google Drive ссылок ===
+def convert_drive_url(url):
+    if "drive.google.com" in url and "/file/d/" in url:
+        try:
+            file_id = url.split("/file/d/")[1].split("/")[0]
+            return f"https://drive.google.com/uc?export=view&id={file_id}"
+        except IndexError:
+            return url
+    return url
+
 # Распарсим страну и город из 'country and city'
 df["country"] = df["country and city"].apply(lambda x: x.split(",")[0].strip() if "," in x else x.strip())
 df["city"] = df["country and city"].apply(lambda x: x.split(",")[1].strip() if "," in x else "")
@@ -107,7 +117,7 @@ for _, row in filtered_df.iterrows():
     country = row["country"].strip()
     location = f"{country}, {city}" if city else country
     fields = [f.strip() for f in row["professional field"].split(",") if f.strip()]
-    photo = row["photo"].strip()
+    photo = convert_drive_url(row["photo"].strip())
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
