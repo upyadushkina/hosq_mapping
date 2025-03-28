@@ -18,7 +18,7 @@ BUTTON_TEXT_COLOR = "#4C4646"          # цвет текста на кнопке
 HEADER_MENU_COLOR = "#262123"          # цвет верхнего меню Streamlit
 
 # === Настройки страницы ===
-st.set_page_config(page_title="Artists Graph", layout="wide")
+st.set_page_config(page_title="HOSQ Artists Mapping", layout="wide")
 
 # === CSS стилизация ===
 st.markdown(f"""
