@@ -18,7 +18,7 @@ BUTTON_TEXT_COLOR = "#4C4646"          # цвет текста на кнопке
 HEADER_MENU_COLOR = "#262123"          # цвет верхнего меню Streamlit
 
 # === Настройки страницы ===
-st.set_page_config(page_title="HOSQ Artists Mapping", layout="wide")
+st.set_page_config(page_title="Artists Graph", layout="wide")
 
 # === CSS стилизация ===
 st.markdown(f"""
@@ -133,7 +133,7 @@ for _, row in filtered_df.iterrows():
     else:
         popup = f"<div style='text-align:center; padding: 10px;'><b>{name}</b></div>"
 
-    net.add_node(name, label=name, title=popup, color=NODE_NAME_COLOR, shape="dot", size=20)
+    net.add_node(name, label="", title=popup, shape="image", image=photo, size=30)
     if location:
         net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=10)
         net.add_edge(name, location)
