@@ -111,14 +111,14 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    popup = f"<div style='text-align:center;'>"
-    if photo:
-        popup += f"<img src='{photo}' width='100'><br>"
-    if telegram:
-        popup += f"<b>Telegram:</b> {telegram}<br>"
-    if email:
-        popup += f"<b>Email:</b> {email}<br>"
-    popup += "</div>"
+    popup = f"""
+    <div style='text-align:center; padding: 10px;'>
+        <div style='font-weight:bold; font-size: 14px; margin-bottom: 5px;'>{name}</div>
+        {f"<img src='{photo}' width='100' style='border-radius: 6px;'><br>" if photo else ""}
+        {f"<b>Telegram:</b> {telegram}<br>" if telegram else ""}
+        {f"<b>Email:</b> {email}<br>" if email else ""}
+    </div>
+    """
 
     net.add_node(name, label=name, title=popup, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
