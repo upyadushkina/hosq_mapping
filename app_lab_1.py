@@ -175,9 +175,9 @@ net.set_options(json.dumps({
     "improvedLayout": True,
     "hierarchical": {
       "enabled": False,
-      "levelSeparation": 150,
-      "nodeSpacing": 100,
-      "treeSpacing": 200,
+      "levelSeparation": 50,
+      "nodeSpacing": 30,
+      "treeSpacing": 60,
       "direction": "UD",
       "sortMethod": "hubsize"
     }
