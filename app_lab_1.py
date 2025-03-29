@@ -133,7 +133,7 @@ for _, row in filtered_df.iterrows():
     else:
         popup = f"<div style='text-align:center; padding: 10px;'><b>{name}</b></div>"
 
-    net.add_node(name, label="", title=popup, shape="image", image=photo, size=30)
+    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
         net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=10)
         net.add_edge(name, location)
