@@ -131,29 +131,55 @@ for _, row in filtered_df.iterrows():
         net.add_edge(name, field)
 
 net.set_options(json.dumps({
+  "edges": {
+    "color": {
+      "color": "#4C4646",
+      "highlight": "#6A50FF",
+      "inherit": False,
+      "opacity": 0.8
+    },
+    "width": 0.5,
+    "selectionWidth": 3,
+    "hoverWidth": 1.5,
+    "smooth": {
+      "enabled": True,
+      "type": "dynamic"
+    }
+  },
   "interaction": {
     "hover": True,
-    "tooltipDelay": 100,
-    "navigationButtons": True,
-    "selectConnectedEdges": True
+    "multiselect": True,
+    "selectable": True,
+    "selectConnectedEdges": True,
+    "dragNodes": True,
+    "dragView": True,
+    "zoomView": True,
+    "navigationButtons": False,
+    "tooltipDelay": 100
   },
   "nodes": {
-    "font": {"size": 14},
+    "shape": "dot",
+    "font": {
+      "color": "#E8DED3",
+      "face": "inter",
+      "size": 16
+    },
     "opacity": 1.0
   },
-  "edges": {
-    "color": {"color": "#4C4646", "highlight": "#6A50FF", "opacity": 0.8},
-    "width": 1
-  },
+  "manipulation": False,
   "physics": {
-    "enabled": True,
-    "barnesHut": {
-      "gravitationalConstant": -30000,
-      "centralGravity": 0.2,
-      "springLength": 80,
-      "springConstant": 0.05,
-      "damping": 0.1,
-      "avoidOverlap": 1
+    "enabled": False
+  },
+  "layout": {
+    "randomSeed": 42,
+    "improvedLayout": True,
+    "hierarchical": {
+      "enabled": False,
+      "levelSeparation": 150,
+      "nodeSpacing": 100,
+      "treeSpacing": 200,
+      "direction": "UD",
+      "sortMethod": "hubsize"
     }
   }
 }))
