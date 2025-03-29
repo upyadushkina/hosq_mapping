@@ -109,8 +109,8 @@ if selected_fields:
 net = Network(height="900px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
 
 NODE_NAME_COLOR = "#4C4646"
-NODE_CITY_COLOR = "#6A50FF"
-NODE_FIELD_COLOR = "#B1D3AA"
+NODE_CITY_COLOR = "#EEC0E7"
+NODE_FIELD_COLOR = "#F4C07C"
 
 for _, row in filtered_df.iterrows():
     name = row["name"].strip()
@@ -122,19 +122,19 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=45)
+    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
-        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=25)
+        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=15)
         net.add_edge(name, location)
     for field in fields:
-        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=25)
+        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=15)
         net.add_edge(name, field)
 
 net.set_options(json.dumps({
   "edges": {
     "color": {
       "color": "#4C4646",
-      "highlight": "#6A50FF",
+      "highlight": "#B3A0EB",
       "inherit": False,
       "opacity": 0.8
     },
