@@ -122,8 +122,8 @@ NODE_ROLE_COLOR = "#F4C07C"
 net = Network(height="900px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
 
 NODE_NAME_COLOR = "#4C4646"
-NODE_CITY_COLOR = "#6A50FF"
-NODE_FIELD_COLOR = "#B1D3AA"
+NODE_CITY_COLOR = "#D3DAE8"
+NODE_FIELD_COLOR = "#EEC0E7"
 
 for _, row in filtered_df.iterrows():
     name = row["name"].strip()
@@ -159,7 +159,7 @@ net.set_options(json.dumps({
   "edges": {
     "color": {
       "color": "#4C4646",
-      "highlight": "#6A50FF",
+      "highlight": "#B3A0EB",
       "inherit": False,
       "opacity": 0.8
     },
