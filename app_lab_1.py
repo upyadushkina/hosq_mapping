@@ -16,6 +16,7 @@ SIDEBAR_TAG_BG_COLOR = "#6A50FF"       # фон выбранного тега
 BUTTON_BG_COLOR = "#262123"            # фон кнопки
 BUTTON_TEXT_COLOR = "#4C4646"          # цвет текста на кнопке
 HEADER_MENU_COLOR = "#262123"          # цвет верхнего меню Streamlit
+GRAPH_LABEL_COLOR = "#E8DED3"          # цвет подписей узлов графа
 
 # === Настройки страницы ===
 st.set_page_config(page_title="Artists Graph", layout="wide")
@@ -121,17 +122,9 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    if photo or telegram or email:
-        popup = (
-            f"<div style='text-align:center; padding: 10px;'>"
-            f"<div style='font-weight:bold; font-size: 14px; margin-bottom: 5px;'>{name}</div>"
-            f"{f'<img src={photo} width=100 style=\"border-radius: 6px;\"><br>' if photo else ''}"
-            f"{f'<b>Telegram:</b> {telegram}<br>' if telegram else ''}"
-            f"{f'<b>Email:</b> {email}<br>' if email else ''}"
-            f"</div>"
-        )
-    else:
-        popup = f"<div style='text-align:center; padding: 10px;'><b>{name}</b></div>"
+    f"<div style='text-align:center; padding: 10px;'><b>{name}</b></div>"
+
+    net.add_node(name, label=name, color=NODE_NAME_COLOR, shape="dot", size=20)
 
     net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
@@ -149,12 +142,18 @@ net.set_options(json.dumps({
     "selectConnectedEdges": True
   },
   "nodes": {
-    "font": {"size": 0},
-    "opacity": 1.0
+    "shape": "dot",
+    "size": 5,
+    "font": {
+        "color": GRAPH_LABEL_COLOR,
+        "face": "inter",
+        # "size": 0
+    },
+    "opacity": 1
   },
   "edges": {
     "color": {"color": "#4C4646", "highlight": "#6A50FF", "opacity": 0.8},
-    "width": 1
+    "width": 3
   },
   "physics": {
     "enabled": True,
