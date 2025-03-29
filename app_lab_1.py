@@ -50,11 +50,11 @@ st.markdown(f"""
     header {{
         background-color: {HEADER_MENU_COLOR} !important;
     }}
-    iframe {{
+    iframe {
         border: none !important;
         box-shadow: none !important;
         background-color: transparent !important;
-        margin-top: 60px;
+        margin-top: 0;
     }}
     </style>
 """, unsafe_allow_html=True)
@@ -106,11 +106,11 @@ if selected_fields:
     filtered_df = filtered_df[filtered_df["professional field"].apply(lambda x: any(f.strip() in x for f in selected_fields))]
 
 # === Подготовка графа ===
-net = Network(height="900px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
+net = Network(height="1200px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
 
 NODE_NAME_COLOR = "#4C4646"
-NODE_CITY_COLOR = "#EEC0E7"
-NODE_FIELD_COLOR = "#F4C07C"
+NODE_CITY_COLOR = "#6A50FF"
+NODE_FIELD_COLOR = "#B1D3AA"
 
 for _, row in filtered_df.iterrows():
     name = row["name"].strip()
@@ -122,19 +122,19 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=20)
+    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=45)
     if location:
-        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=15)
+        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=25)
         net.add_edge(name, location)
     for field in fields:
-        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=15)
+        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=25)
         net.add_edge(name, field)
 
 net.set_options(json.dumps({
   "edges": {
     "color": {
       "color": "#4C4646",
-      "highlight": "#B3A0EB",
+      "highlight": "#6A50FF",
       "inherit": False,
       "opacity": 0.8
     },
@@ -188,9 +188,28 @@ net.set_options(json.dumps({
 temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
 net.save_graph(temp_file.name)
 
-if os.path.exists(temp_file.name):
-    with open(temp_file.name, "r", encoding="utf-8") as f:
-        html_code = f.read()
-    st.components.v1.html(html_code, height=900)
-else:
-    st.error("Graph file was not created.")
+col1, col2 = st.columns([4, 1])
+
+with col1:
+    if os.path.exists(temp_file.name):
+        with open(temp_file.name, "r", encoding="utf-8") as f:
+            html_code = f.read()
+        st.components.v1.html(html_code, height=1200)
+    else:
+        st.error("Graph file was not created.")
+
+with col2:
+    st.subheader("Selected Artist Info")
+    selected_artist = st.session_state.get("selected_artist")
+    if selected_artist:
+        artist_row = df[df["name"] == selected_artist].iloc[0]
+        if artist_row["photo"]:
+            st.image(convert_drive_url(artist_row["photo"]), width=150)
+        if artist_row["telegram nickname"]:
+            st.markdown(f"**Telegram:** {artist_row['telegram nickname']}")
+        if artist_row["email"]:
+            st.markdown(f"**Email:** {artist_row['email']}")
+    else:
+        st.markdown("
+
+_Select a node in the graph to view details here._")
