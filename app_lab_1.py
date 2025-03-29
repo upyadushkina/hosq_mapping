@@ -122,12 +122,12 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=35)
+    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=45)
     if location:
-        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=18)
+        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=25)
         net.add_edge(name, location)
     for field in fields:
-        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=18)
+        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=25)
         net.add_edge(name, field)
 
 net.set_options(json.dumps({
@@ -150,8 +150,8 @@ net.set_options(json.dumps({
     "barnesHut": {
       "gravitationalConstant": -30000,
       "centralGravity": 0.2,
-      "springLength": 120,
-      "springConstant": 0.01,
+      "springLength": 80,
+      "springConstant": 0.05,
       "damping": 0.1,
       "avoidOverlap": 1
     }
