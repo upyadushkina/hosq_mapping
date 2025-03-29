@@ -106,7 +106,7 @@ if selected_fields:
     filtered_df = filtered_df[filtered_df["professional field"].apply(lambda x: any(f.strip() in x for f in selected_fields))]
 
 # === Подготовка графа ===
-net = Network(height="700px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
+net = Network(height="900px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
 
 NODE_NAME_COLOR = "#4C4646"
 NODE_CITY_COLOR = "#6A50FF"
@@ -122,41 +122,35 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=15)
+    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=35)
     if location:
-        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=10)
+        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=18)
         net.add_edge(name, location)
     for field in fields:
-        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=10)
+        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=18)
         net.add_edge(name, field)
 
 net.set_options(json.dumps({
   "interaction": {
     "hover": True,
     "tooltipDelay": 100,
-    "navigationButtons": False,
+    "navigationButtons": True,
     "selectConnectedEdges": True
   },
   "nodes": {
-    "shape": "dot",
-    "size": 5,
-    "font": {
-        "color": GRAPH_LABEL_COLOR,
-        "face": "inter",
-        # "size": 0
-    },
-    "opacity": 1
+    "font": {"size": 14},
+    "opacity": 1.0
   },
   "edges": {
     "color": {"color": "#4C4646", "highlight": "#6A50FF", "opacity": 0.8},
-    "width": 3
+    "width": 1
   },
   "physics": {
     "enabled": True,
     "barnesHut": {
       "gravitationalConstant": -30000,
       "centralGravity": 0.2,
-      "springLength": 300,
+      "springLength": 120,
       "springConstant": 0.01,
       "damping": 0.1,
       "avoidOverlap": 1
@@ -171,6 +165,6 @@ net.save_graph(temp_file.name)
 if os.path.exists(temp_file.name):
     with open(temp_file.name, "r", encoding="utf-8") as f:
         html_code = f.read()
-    st.components.v1.html(html_code, height=700)
+    st.components.v1.html(html_code, height=900)
 else:
     st.error("Graph file was not created.")
