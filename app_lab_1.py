@@ -122,7 +122,14 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=45)
+    info = name
+    if telegram:
+        info += f"
+Telegram: {telegram}"
+    if email:
+        info += f"
+Email: {email}"
+    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=45)
     if location:
         net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=25)
         net.add_edge(name, location)
@@ -188,26 +195,9 @@ net.set_options(json.dumps({
 temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
 net.save_graph(temp_file.name)
 
-col1, col2 = st.columns([4, 1])
-
-with col1:
-    if os.path.exists(temp_file.name):
-        with open(temp_file.name, "r", encoding="utf-8") as f:
-            html_code = f.read()
-        st.components.v1.html(html_code, height=1200)
-    else:
-        st.error("Graph file was not created.")
-
-with col2:
-    st.subheader("Selected Artist Info")
-    selected_artist = st.session_state.get("selected_artist")
-    if selected_artist:
-        artist_row = df[df["name"] == selected_artist].iloc[0]
-        if artist_row["photo"]:
-            st.image(convert_drive_url(artist_row["photo"]), width=150)
-        if artist_row["telegram nickname"]:
-            st.markdown(f"**Telegram:** {artist_row['telegram nickname']}")
-        if artist_row["email"]:
-            st.markdown(f"**Email:** {artist_row['email']}")
-    else:
-        st.markdown("_Select a node in the graph to view details here._")
+if os.path.exists(temp_file.name):
+    with open(temp_file.name, "r", encoding="utf-8") as f:
+        html_code = f.read()
+    st.components.v1.html(html_code, height=1200)
+else:
+    st.error("Graph file was not created.")
