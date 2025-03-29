@@ -135,12 +135,7 @@ net.set_options(json.dumps({
     "hover": True,
     "tooltipDelay": 100,
     "navigationButtons": False,
-    "selectConnectedEdges": True,
-    "multiselect": True,              # удерживать Ctrl для выбора нескольких
-    "selectable": True,               # позволяет выбирать узлы
-    "dragNodes": True,
-    "dragView": True,
-    "zoomView": True,
+    "selectConnectedEdges": True
   },
   "nodes": {
     "shape": "dot",
@@ -166,19 +161,7 @@ net.set_options(json.dumps({
       "damping": 0.1,
       "avoidOverlap": 1
     }
-  },
-  "layout": {
-        "randomSeed": 42,                  # делает граф стабильным между перезагрузками
-        "improvedLayout": True,
-        "hierarchical": {
-            "enabled": False,
-            "levelSeparation": 150,
-            "nodeSpacing": 100,
-            "treeSpacing": 200,
-            "direction": "UD",               # LR, RL, DU
-            "sortMethod": "hubsize"
-        }
-    }
+  }
 }))
 
 # === Генерация HTML и отображение ===
