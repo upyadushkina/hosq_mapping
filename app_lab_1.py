@@ -126,7 +126,7 @@ for _, row in filtered_df.iterrows():
         info += f"\nTelegram: {telegram}"
     if email:
         info += f"\nEmail: {email}"
-    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=25)
+    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
         net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=15)
         net.add_edge(name, location)
@@ -142,7 +142,7 @@ net.set_options(json.dumps({
       "inherit": False,
       "opacity": 0.8
     },
-    "width": 0.5,
+    "width": 1,
     "selectionWidth": 3,
     "hoverWidth": 1.5,
     "smooth": {
@@ -172,13 +172,13 @@ net.set_options(json.dumps({
   },
   "manipulation": False,
   "physics": {
-    "enabled": False
+    "enabled": True
   },
   "layout": {
     "randomSeed": 42,
     "improvedLayout": True,
     "hierarchical": {
-      "enabled": False,
+      "enabled": True,
       "levelSeparation": 10,
       "nodeSpacing": 5,
       "treeSpacing": 10,
