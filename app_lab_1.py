@@ -50,11 +50,11 @@ st.markdown(f"""
     header {{
         background-color: {HEADER_MENU_COLOR} !important;
     }}
-    iframe {
+    iframe {{
         border: none !important;
         box-shadow: none !important;
         background-color: transparent !important;
-        margin-top: 0;
+        margin-top: 60px;
     }}
     </style>
 """, unsafe_allow_html=True)
@@ -106,11 +106,11 @@ if selected_fields:
     filtered_df = filtered_df[filtered_df["professional field"].apply(lambda x: any(f.strip() in x for f in selected_fields))]
 
 # === Подготовка графа ===
-net = Network(height="1200px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
+net = Network(height="900px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
 
 NODE_NAME_COLOR = "#4C4646"
-NODE_CITY_COLOR = "#6A50FF"
-NODE_FIELD_COLOR = "#B1D3AA"
+NODE_CITY_COLOR = "#D3DAE8"
+NODE_FIELD_COLOR = "#EEC0E7"
 
 for _, row in filtered_df.iterrows():
     name = row["name"].strip()
@@ -118,30 +118,27 @@ for _, row in filtered_df.iterrows():
     country = row["country"].strip()
     location = f"{country}, {city}" if city else country
     fields = [f.strip() for f in row["professional field"].split(",") if f.strip()]
-    photo = convert_drive_url(row["photo"].strip())
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
     info = name
     if telegram:
-        info += f"
-Telegram: {telegram}"
+        info += f"\nTelegram: {telegram}"
     if email:
-        info += f"
-Email: {email}"
-    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=45)
+        info += f"\nEmail: {email}"
+    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=35)
     if location:
-        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=25)
+        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=18)
         net.add_edge(name, location)
     for field in fields:
-        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=25)
+        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=18)
         net.add_edge(name, field)
 
 net.set_options(json.dumps({
   "edges": {
     "color": {
       "color": "#4C4646",
-      "highlight": "#6A50FF",
+      "highlight": "#B3A0EB",
       "inherit": False,
       "opacity": 0.8
     },
@@ -182,9 +179,9 @@ net.set_options(json.dumps({
     "improvedLayout": True,
     "hierarchical": {
       "enabled": False,
-      "levelSeparation": 50,
-      "nodeSpacing": 30,
-      "treeSpacing": 60,
+      "levelSeparation": 25,
+      "nodeSpacing": 15,
+      "treeSpacing": 30,
       "direction": "UD",
       "sortMethod": "hubsize"
     }
@@ -198,6 +195,6 @@ net.save_graph(temp_file.name)
 if os.path.exists(temp_file.name):
     with open(temp_file.name, "r", encoding="utf-8") as f:
         html_code = f.read()
-    st.components.v1.html(html_code, height=1200)
+    st.components.v1.html(html_code, height=900)
 else:
     st.error("Graph file was not created.")
