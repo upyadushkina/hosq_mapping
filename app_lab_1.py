@@ -106,7 +106,7 @@ if selected_fields:
     filtered_df = filtered_df[filtered_df["professional field"].apply(lambda x: any(f.strip() in x for f in selected_fields))]
 
 # === Подготовка графа ===
-net = Network(height="1500px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
+net = Network(height="900px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
 
 NODE_NAME_COLOR = "#4C4646"
 NODE_CITY_COLOR = "#6A50FF"
