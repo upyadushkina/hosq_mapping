@@ -210,4 +210,4 @@ with col2:
         if artist_row["email"]:
             st.markdown(f"**Email:** {artist_row['email']}")
     else:
-    st.markdown("_Select a node in the graph to view details here._")
+        st.markdown("_Select a node in the graph to view details here._")
