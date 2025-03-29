@@ -19,7 +19,7 @@ HEADER_MENU_COLOR = "#262123"          # цвет верхнего меню Stre
 GRAPH_LABEL_COLOR = "#E8DED3"          # цвет подписей узлов графа
 
 # === Настройки страницы ===
-st.set_page_config(page_title="Artists Graph", layout="wide")
+st.set_page_config(page_title="HOSQ Artists Mapping", layout="wide")
 
 # === CSS стилизация ===
 st.markdown(f"""
@@ -121,8 +121,6 @@ for _, row in filtered_df.iterrows():
     photo = convert_drive_url(row["photo"].strip())
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
-
-    f"<div style='text-align:center; padding: 10px;'><b>{name}</b></div>"
 
     net.add_node(name, label=name, color=NODE_NAME_COLOR, shape="dot", size=20)
 
