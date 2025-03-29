@@ -122,9 +122,7 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    net.add_node(name, label=name, color=NODE_NAME_COLOR, shape="dot", size=20)
-
-    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=20)
+    net.add_node(name, label=name, title=name, color=NODE_NAME_COLOR, shape="dot", size=15)
     if location:
         net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=10)
         net.add_edge(name, location)
@@ -136,8 +134,13 @@ net.set_options(json.dumps({
   "interaction": {
     "hover": True,
     "tooltipDelay": 100,
-    "navigationButtons": True,
-    "selectConnectedEdges": True
+    "navigationButtons": False,
+    "selectConnectedEdges": True,
+    "multiselect": True,              # удерживать Ctrl для выбора нескольких
+    "selectable": True,               # позволяет выбирать узлы
+    "dragNodes": True,
+    "dragView": True,
+    "zoomView": True,
   },
   "nodes": {
     "shape": "dot",
@@ -163,7 +166,19 @@ net.set_options(json.dumps({
       "damping": 0.1,
       "avoidOverlap": 1
     }
-  }
+  },
+  "layout": {
+        "randomSeed": 42,                  # делает граф стабильным между перезагрузками
+        "improvedLayout": True,
+        "hierarchical": {
+            "enabled": False,
+            "levelSeparation": 150,
+            "nodeSpacing": 100,
+            "treeSpacing": 200,
+            "direction": "UD",               # LR, RL, DU
+            "sortMethod": "hubsize"
+        }
+    }
 }))
 
 # === Генерация HTML и отображение ===
