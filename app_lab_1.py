@@ -178,7 +178,7 @@ net.set_options(json.dumps({
     "randomSeed": 42,
     "improvedLayout": True,
     "hierarchical": {
-      "enabled": True,
+      "enabled": False,
       "levelSeparation": 10,
       "nodeSpacing": 5,
       "treeSpacing": 10,
