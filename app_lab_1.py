@@ -107,15 +107,27 @@ selected_roles = st.sidebar.multiselect("Filter by Role", all_roles)
 selected_countries = st.sidebar.multiselect("Filter by Country", all_countries)
 selected_cities = st.sidebar.multiselect("Filter by City", all_cities)
 
-# === Выбор художника ===
-artist_names = df["name"].dropna().unique().tolist()
-selected_artist = st.sidebar.selectbox("🎨 Choose artist", [""] + artist_names)
-
 if st.sidebar.button("Clear filters"):
     selected_fields = []
     selected_roles = []
     selected_countries = []
     selected_cities = []
+
+# === Выбор художника ===
+artist_names = df["name"].dropna().unique().tolist()
+selected_artist = st.sidebar.selectbox("🎨 Choose artist", [""] + artist_names)
+
+# === Отображение карточки выбранного художника в боковой панели ===
+if selected_artist and selected_artist in df["name"].values:
+    artist = df[df["name"] == selected_artist].iloc[0]
+    st.sidebar.markdown("---")
+    st.sidebar.subheader(f"🎨 {artist['name']}")
+    if artist['photo']:
+        st.sidebar.image(convert_drive_url(artist['photo']), width=200)
+    if artist['telegram nickname']:
+        st.sidebar.write(f"**Telegram:** {artist['telegram nickname']}")
+    if artist['email']:
+        st.sidebar.write(f"**Email:** {artist['email']}")
 
 # === Фильтрация данных ===
 filtered_df = df.copy()
@@ -147,15 +159,11 @@ for _, row in filtered_df.iterrows():
     email = row["email"].strip()
     photo = convert_drive_url(row["photo"].strip()) if row["photo"].strip() else ""
 
-    info = f"<div style='text-align:center;'>"
-    if photo:
-        info += f"<img src='{photo}' width='120'><br>"
-    info += f"<b>{name}</b><br>"
+    info = name
     if telegram:
-        info += f"Telegram: {telegram}<br>"
+        info += f"Telegram: {telegram}"
     if email:
-        info += f"Email: {email}<br>"
-    info += "</div>"
+        info += f"Email: {email}"
 
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
@@ -232,15 +240,3 @@ if os.path.exists(temp_file.name):
     st.components.v1.html(html_code, height=900)
 else:
     st.error("Graph file was not created.")
-
-# === Отображение карточки выбранного художника ===
-if selected_artist and selected_artist in df["name"].values:
-    artist = df[df["name"] == selected_artist].iloc[0]
-    st.markdown("---")
-    st.subheader(f"🎨 {artist['name']}")
-    if artist['photo']:
-        st.image(artist['photo'], width=200)
-    if artist['telegram nickname']:
-        st.write(f"**Telegram:** {artist['telegram nickname']}")
-    if artist['email']:
-        st.write(f"**Email:** {artist['email']}")
