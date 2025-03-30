@@ -143,11 +143,14 @@ for _, row in filtered_df.iterrows():
     email = row["email"].strip()
     photo = convert_drive_url(row["photo"].strip()) if row["photo"].strip() else ""
 
-    info = name
+    info = f"<div style='text-align:center;'>"
+    info += f"<img src='https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png' width='120'><br>"
+    info += f"<b>{name}</b><br>"
     if telegram:
-        info += f"\nTelegram: {telegram}"
+        info += f"Telegram: {telegram}<br>"
     if email:
-        info += f"\nEmail: {email}"
+        info += f"Email: {email}<br>"
+    info += "</div>"
 
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
