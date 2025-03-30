@@ -120,7 +120,7 @@ if selected_artist and selected_artist in df["name"].values:
     st.sidebar.markdown("---")
     with st.sidebar.container():
         st.markdown(f"<div class='artist-card'><h4>🎨 {artist['name']}</h4>", unsafe_allow_html=True)
-        if artist['photo']:
+        if artist['photo (notion url)']:
             st.image(artist['photo (notion url)'], width=200)
         else:
             st.image("https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png", width=200)
@@ -162,9 +162,9 @@ for _, row in filtered_df.iterrows():
 
     info = name
     if telegram:
-        info += f"Telegram: {telegram}<br>"
+        info += f"\nTelegram: {telegram}"
     if email:
-        info += f"Email: {email}<br>"
+        info += f"\nEmail: {email}
 
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
