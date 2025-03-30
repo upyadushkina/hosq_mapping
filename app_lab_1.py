@@ -209,7 +209,8 @@ net.set_options(json.dumps({
     "shape": "dot",
     "font": {
       "color": "#E8DED3",
-      "face": "inter"
+      "face": "inter",
+      "size": 16
     },
     "opacity": 1.0
   },
