@@ -56,6 +56,9 @@ st.markdown(f"""
         color: {BUTTON_CLEAN_TEXT_COLOR} !important;
         border: none;
     }}
+    .artist-card * {{
+        color: {PAGE_TEXT_COLOR} !important;
+    }}
     header {{
         background-color: {HEADER_MENU_COLOR} !important;
     }}
@@ -65,26 +68,13 @@ st.markdown(f"""
         background-color: transparent !important;
         margin-top: 0px;
     }}
-    .artist-card * {{
-        color: #E8DED3 !important;
-    }}
     </style>
 """, unsafe_allow_html=True)
 
 # === Загрузка данных ===
-df = pd.read_csv("Etudes Lab 1 artistis TEST.csv").fillna("")
+df = pd.read_csv("Etudes Lab 1 artistis.csv").fillna("")
 df["professional field"] = df["professional field"].astype(str)
 df["role"] = df["role"].astype(str)
-
-# === Преобразование Google Drive ссылок ===
-def convert_drive_url(url):
-    if "drive.google.com" in url and "/file/d/" in url:
-        try:
-            file_id = url.split("/file/d/")[1].split("/")[0]
-            return f"https://drive.google.com/uc?export=view&id={file_id}"
-        except IndexError:
-            return url
-    return url
 
 # Распарсим страну и город из 'country and city'
 df["country"] = df["country and city"].apply(lambda x: x.split(",")[0].strip() if "," in x else x.strip())
@@ -120,10 +110,10 @@ if selected_artist and selected_artist in df["name"].values:
     st.sidebar.markdown("---")
     with st.sidebar.container():
         st.markdown(f"<div class='artist-card'><h4>🎨 {artist['name']}</h4>", unsafe_allow_html=True)
-        if artist['photo (notion url)']:
-            st.image(artist['photo (notion url)'], width=200)
+        if artist['photo url']:
+            st.image(artist['photo url'], width=200)
         else:
-            st.image("https://file.notion.so/f/f/e2276c64-aa45-460e-ae09-12f699cf38be/1b40f306-5fa9-4431-8a20-41594ad2937c/Aleksandr_Bochkov.jpg?table=block&id=1c611c33-890b-804a-9717-ef36df36e303&spaceId=e2276c64-aa45-460e-ae09-12f699cf38be&expirationTimestamp=1743350400000&signature=uActsr_2yaNohhCJGhDv86d7IfIkCxObv3eYriFFFKk&downloadName=Aleksandr+Bochkov.jpg", width=200)
+            st.image("https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png", width=200)
         if artist['telegram nickname']:
             st.markdown(f"**Telegram:** {artist['telegram nickname']}")
         if artist['email']:
@@ -158,7 +148,7 @@ for _, row in filtered_df.iterrows():
     roles = [r.strip() for r in row["role"].split(",") if r.strip()]
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
-    photo = row["photo"].strip()
+    photo = row["photo url"].strip()
 
     info = name
     if telegram:
