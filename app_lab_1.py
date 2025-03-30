@@ -123,7 +123,7 @@ if selected_artist and selected_artist in df["name"].values:
         if artist['photo (notion url)']:
             st.image(artist['photo (notion url)'], width=200)
         else:
-            st.image("https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png", width=200)
+            st.image("https://file.notion.so/f/f/e2276c64-aa45-460e-ae09-12f699cf38be/1b40f306-5fa9-4431-8a20-41594ad2937c/Aleksandr_Bochkov.jpg?table=block&id=1c611c33-890b-804a-9717-ef36df36e303&spaceId=e2276c64-aa45-460e-ae09-12f699cf38be&expirationTimestamp=1743350400000&signature=uActsr_2yaNohhCJGhDv86d7IfIkCxObv3eYriFFFKk&downloadName=Aleksandr+Bochkov.jpg", width=200)
         if artist['telegram nickname']:
             st.markdown(f"**Telegram:** {artist['telegram nickname']}")
         if artist['email']:
