@@ -190,9 +190,6 @@ net.set_options(json.dumps({
   "nodes": {
     "shape": "dot",
     "font": {
-      "color": "#E8DED3",
-      "face": "inter",
-      "size": 0
     },
     "opacity": 1.0
   },
