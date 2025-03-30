@@ -144,6 +144,12 @@ for _, row in filtered_df.iterrows():
     photo = convert_drive_url(row["photo"].strip()) if row["photo"].strip() else ""
 
     info = name
+    if telegram:
+        info += f"
+        Telegram: {telegram}"
+    if email:
+        info += f"
+        Email: {email}"
 
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
@@ -188,7 +194,6 @@ net.set_options(json.dumps({
     "font": {
       "color": "#E8DED3",
       "face": "inter",
-      "size": 0
     },
     "opacity": 1.0
   },
