@@ -63,7 +63,10 @@ st.markdown(f"""
         border: none !important;
         box-shadow: none !important;
         background-color: transparent !important;
-        margin-top: 0px; /* Изменить это значение для позиционирования графа */
+        margin-top: 0px;
+    }}
+    .artist-card * {{
+        color: {PAGE_TEXT_COLOR} !important;
     }}
     </style>
 """, unsafe_allow_html=True)
@@ -107,27 +110,28 @@ selected_roles = st.sidebar.multiselect("Filter by Role", all_roles)
 selected_countries = st.sidebar.multiselect("Filter by Country", all_countries)
 selected_cities = st.sidebar.multiselect("Filter by City", all_cities)
 
+# === Выбор художника ===
+artist_names = df["name"].dropna().unique().tolist()
+selected_artist = st.sidebar.selectbox("🎨 Choose artist", [""] + artist_names)
+
 if st.sidebar.button("Clear filters"):
     selected_fields = []
     selected_roles = []
     selected_countries = []
     selected_cities = []
 
-# === Выбор художника ===
-artist_names = df["name"].dropna().unique().tolist()
-selected_artist = st.sidebar.selectbox("🎨 Choose artist", [""] + artist_names)
-
 # === Отображение карточки выбранного художника в боковой панели ===
 if selected_artist and selected_artist in df["name"].values:
     artist = df[df["name"] == selected_artist].iloc[0]
     st.sidebar.markdown("---")
-    st.sidebar.subheader(f"🎨 {artist['name']}")
-    if artist['photo']:
-        st.sidebar.image('https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png', width=200)
-    if artist['telegram nickname']:
-        st.sidebar.write(f"**Telegram:** {artist['telegram nickname']}", color = PAGE_TEXT_COLOR)
-    if artist['email']:
-        st.sidebar.write(f"**Email:** {artist['email']}", color = PAGE_TEXT_COLOR)
+    with st.sidebar.container():
+        st.markdown(f"<div class='artist-card'><h4>🎨 {artist['name']}</h4>", unsafe_allow_html=True)
+        st.image("https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png", width=200)
+        if artist['telegram nickname']:
+            st.markdown(f"**Telegram:** {artist['telegram nickname']}")
+        if artist['email']:
+            st.markdown(f"**Email:** {artist['email']}")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # === Фильтрация данных ===
 filtered_df = df.copy()
@@ -159,11 +163,15 @@ for _, row in filtered_df.iterrows():
     email = row["email"].strip()
     photo = convert_drive_url(row["photo"].strip()) if row["photo"].strip() else ""
 
-    info = name
+    info = f"<div style='text-align:center;'>"
+    if photo:
+        info += f"<img src='{photo}' width='120'><br>"
+    info += f"<b>{name}</b><br>"
     if telegram:
-        info += f"Telegram: {telegram}"
+        info += f"Telegram: {telegram}<br>"
     if email:
-        info += f"Email: {email}"
+        info += f"Email: {email}<br>"
+    info += "</div>"
 
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
