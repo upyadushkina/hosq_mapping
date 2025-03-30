@@ -107,6 +107,10 @@ selected_roles = st.sidebar.multiselect("Filter by Role", all_roles)
 selected_countries = st.sidebar.multiselect("Filter by Country", all_countries)
 selected_cities = st.sidebar.multiselect("Filter by City", all_cities)
 
+# === Выбор художника ===
+artist_names = df["name"].dropna().unique().tolist()
+selected_artist = st.sidebar.selectbox("🎨 Choose artist", [""] + artist_names)
+
 if st.sidebar.button("Clear filters"):
     selected_fields = []
     selected_roles = []
@@ -143,11 +147,15 @@ for _, row in filtered_df.iterrows():
     email = row["email"].strip()
     photo = convert_drive_url(row["photo"].strip()) if row["photo"].strip() else ""
 
-    info = name
+    info = f"<div style='text-align:center;'>"
+    if photo:
+        info += f"<img src='{photo}' width='120'><br>"
+    info += f"<b>{name}</b><br>"
     if telegram:
-        info += f"\nTelegram: {telegram}"
+        info += f"Telegram: {telegram}<br>"
     if email:
-        info += f"\nEmail: {email}"
+        info += f"Email: {email}<br>"
+    info += "</div>"
 
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
@@ -190,6 +198,9 @@ net.set_options(json.dumps({
   "nodes": {
     "shape": "dot",
     "font": {
+      "color": "#E8DED3",
+      "face": "inter",
+      "size": 16
     },
     "opacity": 1.0
   },
@@ -212,66 +223,19 @@ net.set_options(json.dumps({
 }))
 
 # === Генерация HTML и отображение ===
-from streamlit.components.v1 import html as st_html
-
-# Сохраняем граф как HTML
 temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
 net.save_graph(temp_file.name)
 
-# Читаем HTML код графа
 if os.path.exists(temp_file.name):
     with open(temp_file.name, "r", encoding="utf-8") as f:
         html_code = f.read()
-
-    # Встраиваем небольшой JS-хак для перехвата кликов по узлам
-    custom_js = """
-    <script type="text/javascript">
-      function waitForVis() {
-        const iframe = window.parent.document.querySelector('iframe');
-        if (!iframe) return setTimeout(waitForVis, 100);
-        const visDoc = iframe.contentDocument || iframe.contentWindow.document;
-        const nodes = visDoc.querySelectorAll('.vis-network canvas');
-        if (nodes.length > 0) {
-          iframe.contentWindow.network.on("click", function(params) {
-            if (params.nodes.length > 0) {
-              const clickedNode = params.nodes[0];
-              fetch(window.location.href, {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({"clicked_node": clickedNode})
-              });
-            }
-          });
-        } else {
-          setTimeout(waitForVis, 100);
-        }
-      }
-      waitForVis();
-    </script>
-    """
-
-    # Отображаем граф + скрипт
-    st_html(html_code + custom_js, height=900)
-
-    # === Панель с инфой по выбранному художнику ===
-    clicked = st.session_state.get("clicked_node")
-    if clicked and clicked in df["name"].values:
-        artist = df[df["name"] == clicked].iloc[0]
-        st.markdown("---")
-        st.subheader(f"🎨 {artist['name']}")
-        if artist['photo']:
-            st.image(artist['photo'], width=200)
-        if artist['telegram nickname']:
-            st.write(f"**Telegram:** {artist['telegram nickname']}")
-        if artist['email']:
-            st.write(f"**Email:** {artist['email']}")
+    st.components.v1.html(html_code, height=900)
 else:
     st.error("Graph file was not created.")
 
-# === Панель с инфой по выбранному художнику ===
-clicked = st.session_state.get("clicked_node")
-if clicked and clicked in df["name"].values:
-    artist = df[df["name"] == clicked].iloc[0]
+# === Отображение карточки выбранного художника ===
+if selected_artist and selected_artist in df["name"].values:
+    artist = df[df["name"] == selected_artist].iloc[0]
     st.markdown("---")
     st.subheader(f"🎨 {artist['name']}")
     if artist['photo']:
@@ -280,5 +244,3 @@ if clicked and clicked in df["name"].values:
         st.write(f"**Telegram:** {artist['telegram nickname']}")
     if artist['email']:
         st.write(f"**Email:** {artist['email']}")
-else:
-    st.error("Graph file was not created.")
