@@ -122,8 +122,8 @@ NODE_ROLE_COLOR = "#F4C07C"
 net = Network(height="900px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
 
 NODE_NAME_COLOR = "#4C4646"
-NODE_CITY_COLOR = "#D3DAE8"
-NODE_FIELD_COLOR = "#EEC0E7"
+NODE_CITY_COLOR = "#6A50FF"
+NODE_FIELD_COLOR = "#B1D3AA"
 
 for _, row in filtered_df.iterrows():
     name = row["name"].strip()
@@ -134,20 +134,23 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    info = f"<b>{name}</b>"
+    info = f"<div style='text-align:center; padding: 10px;'>"
     if row["photo"]:
-        photo_url = convert_drive_url(row["photo"].strip())
-        info += f"<br><img src='{photo_url}' width='100' style='border-radius: 8px;'>"
+        img_url = convert_drive_url(row["photo"].strip())
+        info += f"<img src='{img_url}' width='150'><br>"
+    info += f"<b>{name}</b><br>"
     if telegram:
-        info += f"<br><b>Telegram:</b> {telegram}"
+        info += f"Telegram: {telegram}<br>"
     if email:
-        info += f"<br><b>Email:</b> {email}"
-    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
+        info += f"Email: {email}<br>"
+    info += "</div>"
+        
+    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=35)
     if location:
-        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=15)
+        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=18)
         net.add_edge(name, location)
     for field in fields:
-        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=15)
+        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=18)
         net.add_edge(name, field)
 
     roles = [r.strip() for r in str(row["role"]).split(",") if r.strip()]
@@ -159,7 +162,7 @@ net.set_options(json.dumps({
   "edges": {
     "color": {
       "color": "#4C4646",
-      "highlight": "#B3A0EB",
+      "highlight": "#6A50FF",
       "inherit": False,
       "opacity": 0.8
     },
@@ -187,6 +190,7 @@ net.set_options(json.dumps({
     "font": {
       "color": "#E8DED3",
       "face": "inter",
+      "size": 16
     },
     "opacity": 1.0
   },
