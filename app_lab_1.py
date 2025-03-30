@@ -153,7 +153,7 @@ for _, row in filtered_df.iterrows():
         info += f"Email: {email}<br>"
     info += "</div>"
 
-    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
+    net.add_node(name, label=name, title=info, shape="image", image=photo, size=30)
     if location:
         net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=15)
         net.add_edge(name, location)
