@@ -66,7 +66,7 @@ st.markdown(f"""
         margin-top: 0px;
     }}
     .artist-card * {{
-        color: {PAGE_TEXT_COLOR} !important;
+        color: #E8DED3 !important;
     }}
     </style>
 """, unsafe_allow_html=True)
@@ -113,12 +113,6 @@ selected_cities = st.sidebar.multiselect("Filter by City", all_cities)
 # === Выбор художника ===
 artist_names = df["name"].dropna().unique().tolist()
 selected_artist = st.sidebar.selectbox("🎨 Choose artist", [""] + artist_names)
-
-if st.sidebar.button("Clear filters"):
-    selected_fields = []
-    selected_roles = []
-    selected_countries = []
-    selected_cities = []
 
 # === Отображение карточки выбранного художника в боковой панели ===
 if selected_artist and selected_artist in df["name"].values:
@@ -215,8 +209,7 @@ net.set_options(json.dumps({
     "shape": "dot",
     "font": {
       "color": "#E8DED3",
-      "face": "inter",
-      "size": 16
+      "face": "inter"
     },
     "opacity": 1.0
   },
