@@ -143,14 +143,16 @@ for _, row in filtered_df.iterrows():
     email = row["email"].strip()
     photo = convert_drive_url(row["photo"].strip()) if row["photo"].strip() else ""
 
-    info = f"<div style='text-align:center;'>"
-    info += f"<img src='https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png' width='120'><br>"
-    info += f"<b>{name}</b><br>"
+    info = name
     if telegram:
-        info += f"Telegram: {telegram}<br>"
+        info += f"
+Telegram: {telegram}"
     if email:
-        info += f"Email: {email}<br>"
-    info += "</div>"
+        info += f"
+Email: {email}"
+    if photo:
+        info += f"
+Photo: {photo}"
 
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
@@ -195,6 +197,7 @@ net.set_options(json.dumps({
     "font": {
       "color": "#E8DED3",
       "face": "inter",
+      "size": 0
     },
     "opacity": 1.0
   },
@@ -217,12 +220,48 @@ net.set_options(json.dumps({
 }))
 
 # === Генерация HTML и отображение ===
-temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
-net.save_graph(temp_file.name)
+from streamlit.components.v1 import html as st_html
 
-if os.path.exists(temp_file.name):
-    with open(temp_file.name, "r", encoding="utf-8") as f:
-        html_code = f.read()
-    st.components.v1.html(html_code, height=900)
+# Встраиваем небольшой JS-хак для перехвата кликов по узлам и передачи их в Streamlit
+custom_js = """
+<script type="text/javascript">
+  function waitForVis() {
+    const iframe = window.parent.document.querySelector('iframe');
+    if (!iframe) return setTimeout(waitForVis, 100);
+    const visDoc = iframe.contentDocument || iframe.contentWindow.document;
+    const nodes = visDoc.querySelectorAll('.vis-network canvas');
+    if (nodes.length > 0) {
+      iframe.contentWindow.network.on("click", function(params) {
+        if (params.nodes.length > 0) {
+          const clickedNode = params.nodes[0];
+          fetch(window.location.href, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({"clicked_node": clickedNode})
+          });
+        }
+      });
+    } else {
+      setTimeout(waitForVis, 100);
+    }
+  }
+  waitForVis();
+</script>
+"""
+
+st_html(html_code + custom_js, height=900)
+
+# === Панель с инфой по выбранному художнику ===
+clicked = st.session_state.get("clicked_node")
+if clicked and clicked in df["name"].values:
+    artist = df[df["name"] == clicked].iloc[0]
+    st.markdown("---")
+    st.subheader(f"🎨 {artist['name']}")
+    if artist['photo']:
+        st.image(artist['photo'], width=200)
+    if artist['telegram nickname']:
+        st.write(f"**Telegram:** {artist['telegram nickname']}")
+    if artist['email']:
+        st.write(f"**Email:** {artist['email']}")
 else:
     st.error("Graph file was not created.")
