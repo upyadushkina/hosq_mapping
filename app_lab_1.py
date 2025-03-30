@@ -60,7 +60,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # === Загрузка данных ===
-df = pd.read_excel("Etudes Lab 1 artistis.xlsx").fillna("")
+df = pd.read_csv("Etudes Lab 1 artistis.csv").fillna("")
 df["professional field"] = df["professional field"].astype(str)
 
 # === Преобразование Google Drive ссылок ===
@@ -78,52 +78,39 @@ df["country"] = df["country and city"].apply(lambda x: x.split(",")[0].strip() i
 df["city"] = df["country and city"].apply(lambda x: x.split(",")[1].strip() if "," in x else "")
 
 # === Фильтры ===
+st.sidebar.header("Filters")
+all_countries = sorted(df["country"].unique().tolist())
+all_cities = sorted(set(df["city"].dropna().tolist()) - {""})
 all_fields = sorted(set(
     field.strip()
     for sublist in df["professional field"].dropna().str.split(",")
     for field in sublist if field.strip()
 ))
-all_roles = sorted(set(
-    role.strip()
-    for sublist in df["role"].dropna().astype(str).str.split(",")
-    for role in sublist if role.strip()
-))
-all_countries = sorted(df["country"].unique().tolist())
-all_cities = sorted(set(df["city"].dropna().tolist()) - {""})
 
-st.sidebar.header("Filters")
-selected_fields = st.sidebar.multiselect("Filter by Field", all_fields)
-selected_roles = st.sidebar.multiselect("Filter by Role", all_roles)
 selected_countries = st.sidebar.multiselect("Filter by Country", all_countries)
 selected_cities = st.sidebar.multiselect("Filter by City", all_cities)
+selected_fields = st.sidebar.multiselect("Filter by Field", all_fields)
 
 if st.sidebar.button("Clear filters"):
-    selected_fields = []
-    selected_roles = []
-    selected_countries = []
-    selected_cities = []
     selected_countries = []
     selected_cities = []
     selected_fields = []
 
 # === Фильтрация данных ===
 filtered_df = df.copy()
-if selected_fields:
-    filtered_df = filtered_df[filtered_df["professional field"].apply(lambda x: any(f.strip() in x for f in selected_fields))]
-if selected_roles:
-    filtered_df = filtered_df[filtered_df["role"].apply(lambda x: any(r.strip() in x for r in selected_roles))]
 if selected_countries:
     filtered_df = filtered_df[filtered_df["country"].isin(selected_countries)]
 if selected_cities:
     filtered_df = filtered_df[filtered_df["city"].isin(selected_cities)]
+if selected_fields:
+    filtered_df = filtered_df[filtered_df["professional field"].apply(lambda x: any(f.strip() in x for f in selected_fields))]
 
 # === Подготовка графа ===
-NODE_ROLE_COLOR = "#F4C07C"
 net = Network(height="900px", width="100%", bgcolor=PAGE_BG_COLOR, font_color=PAGE_TEXT_COLOR)
 
 NODE_NAME_COLOR = "#4C4646"
-NODE_CITY_COLOR = "#6A50FF"
-NODE_FIELD_COLOR = "#B1D3AA"
+NODE_CITY_COLOR = "#D3DAE8"
+NODE_FIELD_COLOR = "#EEC0E7"
 
 for _, row in filtered_df.iterrows():
     name = row["name"].strip()
@@ -134,42 +121,28 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    info = f"<b>{name}</b>"
-    if row["photo"]:
-        photo_path = row["photo"].strip()
-        if os.path.exists(photo_path):
-            with open(photo_path, "rb") as img_file:
-                encoded = base64.b64encode(img_file.read()).decode()
-                photo_url = f"data:image/png;base64,{encoded}"
-        else:
-            photo_url = ""
-        info += f"<br><img src='{photo_url}' width='100' style='border-radius: 8px;'>"
+    info = name
     if telegram:
-        info += f"<br><b>Telegram:</b> {telegram}"
+        info += f"\nTelegram: {telegram}"
     if email:
-        info += f"<br><b>Email:</b> {email}"
-    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=35)
+        info += f"\nEmail: {email}"
+    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
-        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=18)
+        net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=15)
         net.add_edge(name, location)
     for field in fields:
-        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=18)
+        net.add_node(field, label=field, title=field, color=NODE_FIELD_COLOR, shape="dot", size=15)
         net.add_edge(name, field)
-
-    roles = [r.strip() for r in str(row["role"]).split(",") if r.strip()]
-    for role in roles:
-        net.add_node(role, label=role, title=role, color=NODE_ROLE_COLOR, shape="dot", size=18)
-        net.add_edge(name, role)
 
 net.set_options(json.dumps({
   "edges": {
     "color": {
       "color": "#4C4646",
-      "highlight": "#6A50FF",
+      "highlight": "#B3A0EB",
       "inherit": False,
       "opacity": 0.8
     },
-    "width": 0.5,
+    "width": 1,
     "selectionWidth": 3,
     "hoverWidth": 1.5,
     "smooth": {
@@ -199,16 +172,16 @@ net.set_options(json.dumps({
   },
   "manipulation": False,
   "physics": {
-    "enabled": False
+    "enabled": True
   },
   "layout": {
     "randomSeed": 42,
     "improvedLayout": True,
     "hierarchical": {
       "enabled": False,
-      "levelSeparation": 25,
-      "nodeSpacing": 15,
-      "treeSpacing": 30,
+      "levelSeparation": 10,
+      "nodeSpacing": 5,
+      "treeSpacing": 10,
       "direction": "UD",
       "sortMethod": "hubsize"
     }
