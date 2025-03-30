@@ -60,7 +60,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # === Загрузка данных ===
-df = pd.read_csv("Etudes Lab 1 artistis.csv").fillna("")
+df = pd.read_excel("Etudes Lab 1 artistis.xlsx").fillna("")
 df["professional field"] = df["professional field"].astype(str)
 
 # === Преобразование Google Drive ссылок ===
@@ -134,17 +134,20 @@ for _, row in filtered_df.iterrows():
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
 
-    info = f"<div style='text-align:center; padding: 10px;'>"
+    info = f"<b>{name}</b>"
     if row["photo"]:
-        img_url = convert_drive_url(row["photo"].strip())
-        info += f"<img src='{img_url}' width='150'><br>"
-    info += f"<b>{name}</b><br>"
+        photo_path = row["photo"].strip()
+        if os.path.exists(photo_path):
+            with open(photo_path, "rb") as img_file:
+                encoded = base64.b64encode(img_file.read()).decode()
+                photo_url = f"data:image/png;base64,{encoded}"
+        else:
+            photo_url = ""
+        info += f"<br><img src='{photo_url}' width='100' style='border-radius: 8px;'>"
     if telegram:
-        info += f"Telegram: {telegram}<br>"
+        info += f"<br><b>Telegram:</b> {telegram}"
     if email:
-        info += f"Email: {email}<br>"
-    info += "</div>"
-        
+        info += f"<br><b>Email:</b> {email}"
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=35)
     if location:
         net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=18)
