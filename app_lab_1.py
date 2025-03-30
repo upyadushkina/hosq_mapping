@@ -144,7 +144,8 @@ for _, row in filtered_df.iterrows():
     photo = convert_drive_url(row["photo"].strip()) if row["photo"].strip() else ""
 
     info = name
-    net.add_node(name, label=name, title=info, shape="image", image=photo, size=30)
+
+    net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
         net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=15)
         net.add_edge(name, location)
@@ -187,7 +188,7 @@ net.set_options(json.dumps({
     "font": {
       "color": "#E8DED3",
       "face": "inter",
-      "size": 16
+      "size": 0
     },
     "opacity": 1.0
   },
