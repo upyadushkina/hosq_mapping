@@ -123,11 +123,11 @@ if selected_artist and selected_artist in df["name"].values:
     st.sidebar.markdown("---")
     st.sidebar.subheader(f"🎨 {artist['name']}")
     if artist['photo']:
-        st.sidebar.image(convert_drive_url(artist['photo']), width=200)
+        st.sidebar.image('https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png', width=200)
     if artist['telegram nickname']:
-        st.sidebar.write(f"**Telegram:** {artist['telegram nickname']}")
+        st.sidebar.write(f"**Telegram:** {artist['telegram nickname']}", color = PAGE_TEXT_COLOR)
     if artist['email']:
-        st.sidebar.write(f"**Email:** {artist['email']}")
+        st.sidebar.write(f"**Email:** {artist['email']}", color = PAGE_TEXT_COLOR)
 
 # === Фильтрация данных ===
 filtered_df = df.copy()
