@@ -143,16 +143,7 @@ for _, row in filtered_df.iterrows():
     email = row["email"].strip()
     photo = convert_drive_url(row["photo"].strip()) if row["photo"].strip() else ""
 
-    info = f"<div style='text-align:center;'>"
-    if photo:
-        info += f"<img src='{photo}' width='120'><br>"
-    info += f"<b>{name}</b><br>"
-    if telegram:
-        info += f"Telegram: {telegram}<br>"
-    if email:
-        info += f"Email: {email}<br>"
-    info += "</div>"
-
+    info = name
     net.add_node(name, label=name, title=info, shape="image", image=photo, size=30)
     if location:
         net.add_node(location, label=location, title=location, color=NODE_CITY_COLOR, shape="dot", size=15)
