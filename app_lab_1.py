@@ -164,7 +164,7 @@ for _, row in filtered_df.iterrows():
     if telegram:
         info += f"\nTelegram: {telegram}"
     if email:
-        info += f"\nEmail: {email}
+        info += f"\nEmail: {email}"
 
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
