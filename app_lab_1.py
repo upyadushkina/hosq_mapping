@@ -72,7 +72,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # === Загрузка данных ===
-df = pd.read_csv("Etudes Lab 1 artistis.csv").fillna("")
+df = pd.read_csv("Etudes Lab 1 artistis TEST.csv").fillna("")
 df["professional field"] = df["professional field"].astype(str)
 df["role"] = df["role"].astype(str)
 
@@ -120,7 +120,10 @@ if selected_artist and selected_artist in df["name"].values:
     st.sidebar.markdown("---")
     with st.sidebar.container():
         st.markdown(f"<div class='artist-card'><h4>🎨 {artist['name']}</h4>", unsafe_allow_html=True)
-        st.image("https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png", width=200)
+        if artist['photo']:
+            st.image(artist['photo (notion url)'], width=200)
+        else:
+            st.image("https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png", width=200)
         if artist['telegram nickname']:
             st.markdown(f"**Telegram:** {artist['telegram nickname']}")
         if artist['email']:
@@ -155,17 +158,13 @@ for _, row in filtered_df.iterrows():
     roles = [r.strip() for r in row["role"].split(",") if r.strip()]
     telegram = row["telegram nickname"].strip()
     email = row["email"].strip()
-    photo = convert_drive_url(row["photo"].strip()) if row["photo"].strip() else ""
+    photo = row["photo"].strip()
 
-    info = f"<div style='text-align:center;'>"
-    if photo:
-        info += f"<img src='{photo}' width='120'><br>"
-    info += f"<b>{name}</b><br>"
+    info = name
     if telegram:
         info += f"Telegram: {telegram}<br>"
     if email:
         info += f"Email: {email}<br>"
-    info += "</div>"
 
     net.add_node(name, label=name, title=info, color=NODE_NAME_COLOR, shape="dot", size=20)
     if location:
