@@ -117,7 +117,7 @@ if selected_artist and selected_artist in df["name"].values:
     with st.sidebar.container():
         st.markdown(f"<div class='artist-card'><h4>🎨 {artist['name']}</h4>", unsafe_allow_html=True)
         if artist['photo url']:
-            st.image(artist[get_google_drive_image_url('photo url')], width=200)
+            st.image(get_google_drive_image_url(artist['photo url']), width=200)
         else:
             st.image("https://static.tildacdn.com/tild3532-6664-4163-b538-663866613835/hosq-design-NEW.png", width=200)
         if artist['telegram nickname']:
