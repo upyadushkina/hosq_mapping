@@ -253,7 +253,7 @@ function onHover(event, d) {
       ${artist.role ? `<div><span style='color: #4C4646;'>${artist.role}</span></div>` : ''}
       <img src="${artist.photo}" alt="photo"><br>
       ${(artist.country || artist.city) ? `<div><span style='color: #6A50FF;'>${artist.country}${artist.city ? ', ' + artist.city : ''}</span></div>` : ''}
-      ${artist.department ? `<div><span style='color: var(--popup-text);'>lab:</span> <span style='color: #6A50FF;'>${artist.lab}</span></div>` : ''}
+      ${artist.lab ? `<div><span style='color: var(--popup-text);'>lab:</span> <span style='color: #6A50FF;'>${artist.lab}</span></div>` : ''}
 
       ${artist.department ? `<div><span style='color: var(--popup-text);'>department:</span> <span style='color: #4C4646;'>${artist.department}</span></div>` : ''}
       ${artist.discipline ? `<div><span style='color: var(--popup-text);'>disciplines:</span> <span style='color: #4C4646;'>${artist.discipline}</span></div>` : ''}
