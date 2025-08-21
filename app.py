@@ -38,7 +38,7 @@ def get_google_drive_image_url(url):
         return f"https://drive.google.com/thumbnail?id={file_id}"
     return url
 
-st.set_page_config(page_title="Notations Lab", layout="wide")
+st.set_page_config(page_title="HOSQ Labs", layout="wide")
 st.markdown(f"""
   <style>
     html, body, .stApp, .css-18e3th9, .css-1d391kg {{
@@ -78,7 +78,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # Load and process CSV
-df = pd.read_csv("Notations Lab DATABASE.csv")
+df = pd.read_csv("ALL LABS DATABASE.csv")
 df.fillna('', inplace=True)
 
 category_colors = {
@@ -93,7 +93,7 @@ category_colors = {
     # 'seeking for': "#EC7F4D",
 }
 
-multi_fields = ['department', 'role', 'discipline', 'instruments', 'skill set']
+multi_fields = ['lab', 'department', 'role', 'discipline', 'instruments', 'skill set']
 nodes, links, artist_info = [], [], {}
 node_ids, edge_ids = set(), set()
 filter_options = defaultdict(set)
@@ -164,6 +164,7 @@ for _, row in df.iterrows():
         "country": row['country and city'],
         # "city": city,
         "role": row['role'],
+        "lab": row['lab'],
         "discipline": row['discipline'],
         "department": row['department'],
         "instruments": row['instruments'],
