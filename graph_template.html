@@ -62,7 +62,45 @@
     color: #E8DED3;
     z-index: 100;
   " />
+
+<!-- КНОПКА FULLSCREEN -->
+<button onclick="openFullscreen()" style="
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #6A50FF;
+  color: white;
+  font-family: 'Lexend', sans-serif;
+  cursor: pointer;
+">Full screen</button>
+
+<script>
+  function openFullscreen() {
+    const docElm = document.documentElement;
   
+    if (docElm.requestFullscreen) {
+      docElm.requestFullscreen();
+    } else if (docElm.webkitRequestFullscreen) {
+      docElm.webkitRequestFullscreen();
+    } else if (docElm.msRequestFullscreen) { // IE11
+      docElm.msRequestFullscreen();
+    } else {
+      // Fallback: эмулируем fullscreen на iOS
+      document.body.style.position = 'fixed';
+      document.body.style.top = '0';
+      document.body.style.left = '0';
+      document.body.style.width = '100vw';
+      document.body.style.height = '100vh';
+      document.body.style.overflow = 'hidden';
+      document.querySelector('svg').style.height = '100vh';
+    }
+  }
+</script>
+
 <svg></svg>
 // <div id='popup' class='popup' style='display:none;'></div>
 <div id='popup' class='popup' style='user-select: text; -webkit-user-select: text; display: none;'></div>
